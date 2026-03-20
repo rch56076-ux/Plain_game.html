@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plane Shooter</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+
+    #plane {
+      width: 60px;
+      height: 60px;
+      background: cyan;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+
+    .bullet {
+      width: 6px;
+      height: 20px;
+      background: yellow;
+      position: absolute;
+    }
+
+    .meteor {
+      width: 40px;
+      height: 40px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    #score {
+      color: white;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="score">Score: 0</div>
+<div id="plane"></div>
+
+  <script>
+let plane = document.getElementById("plane");
+let score = 0;
+
+// Move plane with touch
+document.addEventListener("touchmove", (e) => {
+  let x = e.touches[0].clientX;
+  plane.style.left = x + "px";
+});
+
+// Shoot bullet on tap
+document.addEventListener("touchstart", () => {
+  let bullet = document.createElement("div");
+  bullet.classList.add("bullet");
+
+  let rect = plane.getBoundingClientRect();
+  bullet.style.left = rect.left + 25 + "px";
+  bullet.style.top = rect.top + "px";
+
+  document.body.appendChild(bullet);
+
+  let move = setInterval(() => {
+    bullet.style.top = (bullet.offsetTop - 10) + "px";
+
+    if (bullet.offsetTop < 0) {
+      bullet.remove();
+      clearInterval(move);
+    }
+
+    document.querySelectorAll(".meteor").forEach(meteor => {
+      if (isCollide(bullet, meteor)) {
+        meteor.remove();
+        bullet.remove();
+        score++;
+        document.getElementById("score").innerText = "Score: " + score;
+      }
+    });
+
+  }, 30);
+});
+
+// Create meteors
+setInterval(() => {
+  let meteor = document.createElement("div");
+  meteor.classList.add("meteor");
+
+  meteor.style.left = Math.random() * window.innerWidth + "px";
+  meteor.style.top = "0px";
+
+  document.body.appendChild(meteor);
+
+  let fall = setInterval(() => {
+    meteor.style.top = (meteor.offsetTop + 5) + "px";
+
+    if (meteor.offsetTop > window.innerHeight) {
+      meteor.remove();
+      clearInterval(fall);
+    }
+  }, 50);
+
+}, 1000);
+
+// Collision detection
+function isCollide(a, b) {
+  let r1 = a.getBoundingClientRect();
+  let r2 = b.getBoundingClientRect();
+
+  return !(
+    r1.top > r2.bottom ||
+    r1.bottom < r2.top ||
+    r1.right < r2.left ||
+    r1.left > r2.right
+  );
+}
+</script>
+
+</body>
+</html>
