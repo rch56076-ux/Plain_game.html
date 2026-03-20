@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plane Shooter</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+
+    #plane {
+      width: 60px;
+      height: 60px;
+      background: cyan;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+    }
+
+    .bullet {
+      width: 6px;
+      height: 20px;
+      background: yellow;
+      position: absolute;
+    }
+
+    .meteor {
+      width: 40px;
+      height: 40px;
+      background: red;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    #score {
+      color: white;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="score">Score: 0</div>
+<div id="plane"></div>
+
+<script>
+let plane = document.getElementById("plane");
+let score = 0;
+
+// Move plane with touch
